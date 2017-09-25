@@ -8,12 +8,15 @@ int ledRed = 4;    /* Alarm */
 int ledGreen = 2;  /* OK */
 
 int buzzer = 8;    /* Buzzer pin */
+int breaker = 12;  /* Breaker button pin */
 
 int gasAnalog = 0;  /* Pin for gas sensor */
 int potAnalog = 1;  /* Pin for potentiometer */
 
 int gas = 0;  /* Gas level */
 int pot = 0;  /* Potentiometer level */
+
+int breakDelay = 0; /* Break delay in number of cycles */
 
 
 void playAlarm() {
@@ -38,6 +41,7 @@ void setup() {
   pinMode(ledRed,   OUTPUT);
   pinMode(ledBlue,  OUTPUT);
   pinMode(ledGreen, OUTPUT);
+  pinMode(breaker,  INPUT);
 
   /* While gas detector warming up,
    *  blinking 20 seconds
@@ -55,17 +59,29 @@ void setup() {
 
 
 void loop() {
+  
+  /* Update breaking data */
+  if (digitalRead(breaker) > 0) {
+    breakDelay = 120; /* 120 seconds, if cycle == 1 sec */
+  }
 
   /* Read gas level */
   gas = analogRead(gasAnalog);
   pot = analogRead(potAnalog);
 
   if (gas + pot >= 1024) {  /* Danger */
-    /* Light Red LED */
-    digitalWrite(ledRed, HIGH);
-    digitalWrite(ledGreen, LOW);
-    /* Play alarm */
-    playAlarm();
+
+    if (breakDelay > 0) { /* Breaker is activated, don't alarm */
+      breakDelay -= 1;
+
+    } else {
+      /* Light Red LED */
+      digitalWrite(ledRed, HIGH);
+      digitalWrite(ledGreen, LOW);
+      /* Play alarm */
+      playAlarm();
+
+    }
 
   } else {
     /* Light Green LED */
