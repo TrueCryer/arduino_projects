@@ -29,7 +29,7 @@ void playAlarm() {
   tone(buzzer, NOTE_E4); delay(250);
   tone(buzzer, NOTE_D4); delay(500);
   
-  noTone(buzzer); delay(1000);
+  noTone(buzzer); delay(500);
 
 }
 
@@ -71,19 +71,18 @@ void loop() {
 
   if (gas + pot >= 1024) {  /* Danger */
 
+    /* Light Red LED */
+    digitalWrite(ledRed, HIGH);
+    digitalWrite(ledGreen, LOW);
+
     if (breakDelay > 0) { /* Breaker is activated, don't alarm */
       breakDelay -= 1;
-
     } else {
-      /* Light Red LED */
-      digitalWrite(ledRed, HIGH);
-      digitalWrite(ledGreen, LOW);
-      /* Play alarm */
       playAlarm();
-
-    }
+    };
 
   } else {
+
     /* Light Green LED */
     digitalWrite(ledGreen, HIGH);
     digitalWrite(ledRed, LOW);
