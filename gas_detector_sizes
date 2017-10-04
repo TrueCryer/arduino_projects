@@ -1,0 +1,21 @@
+Button
+L30 W22 D12
+d5-2 h9
+
+Buzzer
+L28 W18 D12
+d5-2 h7
+
+Sensor
+L37 W22 D16
+d5-2 h7
+
+Potentiometer
+L31 W22 D7
+d5-2 h12
+
+Diod
+d3 D3.5
+
+Body
+L79.5 W65 H~70
